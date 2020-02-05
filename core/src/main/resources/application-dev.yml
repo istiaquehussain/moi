@@ -13,7 +13,7 @@ spring:
 aws:
   iam:
     user:
-      accessKey: XYZ
+      accessKey: XYZ1
       secretKey: LMN
   sqs:
     queueUrl: https://sqs.eu-west-1.amazonaws.com/PQWWS
