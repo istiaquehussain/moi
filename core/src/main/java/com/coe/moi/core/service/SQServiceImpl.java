@@ -2,23 +2,81 @@ package com.coe.moi.core.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.coe.moi.core.dao.SQSRepository;
 import com.coe.moi.core.entity.QueMessage;
 import com.coe.moi.core.util.QueMessageMapper;
 
 @Service
 public class SQServiceImpl implements SQService {
+	@Autowired
+	SQSRepository repository;
+
+	@Override
+	public Optional<QueMessage> readMessage() {
+		return null;
+	}
+
+	@Override
+	public List<QueMessage> readMessages() {
+		List<Message> messages = repository.receiveAndRemoveMessage();
+        List<QueMessage> returnMessage= new ArrayList<QueMessage>();
+        messages.stream().forEach(message->
+        		{
+        			try {
+						returnMessage.add(QueMessageMapper.getQueMessageMapper().getObjectMessage(message.getBody()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+        		}
+        		);
+        
+		return returnMessage;
+	}
+	
+	@Override
+	public List<QueMessage> readMessagesForId(String Id) {
+		
+		List<Message> messages = repository.readMessagesForId(Id);
+		List<QueMessage> returnMessage= new ArrayList<QueMessage>();
+		
+		messages.stream().forEach(message->
+		{
+			try {
+				returnMessage.add(QueMessageMapper.getQueMessageMapper().getObjectMessage(message.getBody()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		);
+
+		return returnMessage;
+	}
+	
+	@Override
+	public Optional<QueMessage> writeMessage(QueMessage message) {
+		QueMessage returnMessage =null;
+		try {
+			String msg = QueMessageMapper.getQueMessageMapper().getStringMessage(message);
+			Optional<String>writtenMessage=repository.writeMessage(msg);
+			if(writtenMessage.isPresent())
+				returnMessage=message;
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return Optional.of(returnMessage);
+	}
+	
+	
+	/*
 	//final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
 	BasicAWSCredentials awsCreds = new BasicAWSCredentials("PP", "LLL");
 	Regions region = Regions.EU_WEST_1;
@@ -83,5 +141,5 @@ public class SQServiceImpl implements SQService {
 		      .withRegion(region) //
 		      .build();
 		}
-
+*/
 }
