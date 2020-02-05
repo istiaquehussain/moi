@@ -12,6 +12,8 @@ public interface SQService {
 	
 	List<QueMessage> readMessages();
 	
+	List<QueMessage> readMessagesForId(String Id);
+	
 	Optional<QueMessage> writeMessage(QueMessage message);
 	
 	

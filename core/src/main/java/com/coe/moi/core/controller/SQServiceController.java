@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coe.moi.core.entity.Employee;
 import com.coe.moi.core.entity.QueMessage;
 import com.coe.moi.core.service.SQService;
 
@@ -25,6 +27,12 @@ public class SQServiceController {
 		List<QueMessage> messages=service.readMessages();
 		return new ResponseEntity<>(messages,((messages!=null) && (messages.size()>0))?HttpStatus.FOUND:HttpStatus.NOT_FOUND);
 		
+	}
+	
+	@GetMapping("/sqs/messages/id/{id}")
+	public ResponseEntity<?>  readMessages(@PathVariable("id") String authIdID){
+		List<QueMessage> messages=service.readMessagesForId(authIdID);
+		return new ResponseEntity<>(messages,((messages!=null) && (messages.size()>0))?HttpStatus.FOUND:HttpStatus.NOT_FOUND);
 	}
 	
 	@PostMapping("/sqs/new")
