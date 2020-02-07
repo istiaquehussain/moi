@@ -1,11 +1,14 @@
 package com.coe.moi.core.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity(name = "IOT_ACTION")
 public class IotAction {
+	@Id @GeneratedValue
 	Long id;
 	String ioId;
 	String ioMode;

@@ -44,8 +44,8 @@ public class IotServiceController {
 	
 	@GetMapping("/iot/actions/uid/{id}")
 	public ResponseEntity<?>  findActionByUid(@PathVariable("id") Long id){
-		Optional<IotAction> action=service.findActionByUid(id);
-		return new ResponseEntity<>(action,(action.isPresent())?HttpStatus.FOUND:HttpStatus.NOT_FOUND);
+		List<IotAction> actions=service.findActionByUid(id);
+		return new ResponseEntity<>(actions,((actions!=null) && (actions.size()>0))?HttpStatus.FOUND:HttpStatus.NOT_FOUND);
 	}
 	
 	
@@ -105,10 +105,49 @@ public class IotServiceController {
 		
 	}
 	
-	@PutMapping("/iot/user/remove/id/{id}")
-	public ResponseEntity<?>  deleteEmplyeeById(@PathVariable("id") Long employeeID){
-		Boolean status = service.deleteEmplyeeById(employeeID);
+	@PutMapping("/iot/users/remove/id/{id}")
+	public ResponseEntity<?>  deleteUsertById(@PathVariable("id") Long id){
+		service.findActionByUid(id).stream().forEach(action->service.deleteAction(action.getId()));
+		Boolean status = service.deleteUser(id);
 		return new ResponseEntity<>(status,(status)?HttpStatus.ACCEPTED:HttpStatus.NOT_ACCEPTABLE);
 	}
+	
+	@PutMapping("/iot/boards/remove/id/{id}")
+	public ResponseEntity<?>  deleteBoardById(@PathVariable("id") Long id){
+		service.findActionByBid(id).stream().forEach(action->service.deleteAction(action.getId()));
+		Boolean status = service.deleteBoard(id);
+		return new ResponseEntity<>(status,(status)?HttpStatus.ACCEPTED:HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PutMapping("/iot/Actions/remove/id/{id}")
+	public ResponseEntity<?>  deleteActionById(@PathVariable("id") Long id){
+		Boolean status = service.deleteAction(id);
+		return new ResponseEntity<>(status,(status)?HttpStatus.ACCEPTED:HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PutMapping("/iot/actions")
+	public ResponseEntity<?>  updateActions(@RequestBody Action action){
+		IotAction iotAction= new IotAction();
+		iotAction.setIoAction(action.getIoAction());
+		iotAction.setIoId(action.getIoId());
+		iotAction.setIoMode(action.getIoMode());
+		
+		Optional<UserProfile> user = service.findUserById(action.getUserId());
+		if(user.isPresent())
+			iotAction.setUser(user.get());
+		else
+			return new ResponseEntity<>(iotAction,HttpStatus.NOT_ACCEPTABLE);
+		
+		Optional<Board> board = service.findBoardById(action.getBoardId());
+		if(board.isPresent())
+			iotAction.setBoard(board.get());
+		else
+			return new ResponseEntity<>(iotAction,HttpStatus.NOT_ACCEPTABLE);
+		
+		IotAction newAction=service.updateAction(iotAction);
+		return new ResponseEntity<>(newAction,(newAction!=null)?HttpStatus.ACCEPTED:HttpStatus.NOT_ACCEPTABLE);
+		
+	}
+	
 	
 }
