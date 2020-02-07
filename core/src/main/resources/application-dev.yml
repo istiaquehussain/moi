@@ -13,10 +13,10 @@ spring:
 aws:
   iam:
     user:
-      accessKey: AKIAZM26BIHNEBXXOI2A
-      secretKey: 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
+      accessKey: 
+      secretKey: 
   sqs:
-    queueUrl: https://sqs.eu-west-1.amazonaws.com/646052921818/IOTQue
+    queueUrl: 
     delayInSeconds: 5
   region: eu-west-1       
 

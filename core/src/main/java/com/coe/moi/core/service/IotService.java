@@ -39,12 +39,14 @@ public interface IotService {
 	Optional<IotAction> findActionById(Long aid);
 	
 	List<IotAction> findActions();
+	List<IotAction> findActionByUid(Long uid);
+	List<IotAction> findActionByBid(Long bid);
 	
 	Optional<IotAction> createAction(IotAction action);
 	
 	Boolean deleteAction(Long aid);
 	
-	Optional<IotAction> findActionByUid(Long uid);
+	
 	
 	IotAction updateAction(IotAction action);
 	
