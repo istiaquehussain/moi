@@ -30,5 +30,17 @@ public class Board {
 	}
 	
 	
+	
+	public Board(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "Board [id=" + id + ", name=" + name + "]";
+	}
+	
+	
 
 }
