@@ -96,15 +96,19 @@ public class IotServiceImpl implements IotService {
 	}
 
 	@Override
-	public List<IotAction> findActionByUid(Long uid) {
-		return actionRepo.findIotActionByUid(uid);
+	public List<IotAction> findActionByBid(Long bid) {
+		Board board=new Board();
+		board.setId(bid);
+		return actionRepo.findByBoard(board);
 	}
 	
 	
 
 	@Override
-	public List<IotAction> findActionByBid(Long bid) {
-		return actionRepo.findIotActionByBid(bid);
+	public List<IotAction> findActionByUid(Long uid) {
+		UserProfile user=new UserProfile();
+		user.setId(uid);
+		return actionRepo.findByUser(user);
 	}
 
 	@Override

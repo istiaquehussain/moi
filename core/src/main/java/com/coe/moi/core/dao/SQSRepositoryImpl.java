@@ -59,22 +59,22 @@ public class SQSRepositoryImpl implements SQSRepository{
 		return sqs;
 		}
 	
-	@PostConstruct
+	/*@PostConstruct
 	private void setSQS()
 	{
 		createSqsClient(createAwsCredential(accessKey,secretKey),region);
-	}
+	}*/
 	
 	public List<Message> receiveMessage() {
-		//if(sqs==null)
-		//	createSqsClient(createAwsCredential(accessKey,secretKey),region);
+		if(sqs==null)
+			createSqsClient(createAwsCredential(accessKey,secretKey),region);
 		List<Message> messages = sqs.receiveMessage(queueUrl).getMessages();
         return messages;
 	}
 	
 	public List<Message> receiveAndRemoveMessage() {
-		//if(sqs==null)
-		//	createSqsClient(createAwsCredential(accessKey,secretKey),region);
+		if(sqs==null)
+			createSqsClient(createAwsCredential(accessKey,secretKey),region);
 		List<Message> messages = sqs.receiveMessage(queueUrl).getMessages();
 		messages.stream().forEach(message->sqs.deleteMessage(queueUrl, message.getReceiptHandle()));
 		return messages;
@@ -82,6 +82,8 @@ public class SQSRepositoryImpl implements SQSRepository{
 	
 	@Override
 	public List<Message> readMessagesForId(String Id) {
+		if(sqs==null)
+			createSqsClient(createAwsCredential(accessKey,secretKey),region);
 		List<Message> messages = sqs.receiveMessage(queueUrl).getMessages();
 		
 		List<Message> userMessages = messages.stream().filter(message-> {
@@ -105,8 +107,8 @@ public class SQSRepositoryImpl implements SQSRepository{
 	
 	
 	public Optional<String> writeMessage(String message) {
-		//if(sqs==null)
-		//	createSqsClient(createAwsCredential(accessKey,secretKey),region);
+		if(sqs==null)
+			createSqsClient(createAwsCredential(accessKey,secretKey),region);
 		String returnMessage =null;
 		try {
 			SendMessageRequest send_msg_request = new SendMessageRequest()

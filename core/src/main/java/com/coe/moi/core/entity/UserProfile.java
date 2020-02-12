@@ -21,6 +21,13 @@ public class UserProfile {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public UserProfile(Long id, String name, String password) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.password = password;
+	}
 
 	public Long getId() {
 		return id;
@@ -45,5 +52,11 @@ public class UserProfile {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "UserProfile [id=" + id + ", name=" + name + ", password=" + password + "]";
+	}
+	
 	
 }

@@ -1,23 +1,38 @@
 package com.coe.moi.core.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity(name = "IOT_ACTION")
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
+@Entity
+@Table(name = "IOT_ACTION")
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class IotAction {
 	@Id @GeneratedValue
 	Long id;
 	String ioId;
 	String ioMode;
 	String ioAction;
-	@ManyToOne
-	@JoinColumn(name="bId")
+	@ManyToOne (
+			 optional = false
+			)
+	@JoinColumn(name="bid",
+			nullable = false
+			)
 	Board board;
-	@ManyToOne
-	@JoinColumn(name="uId")
+	@ManyToOne(
+			 optional = false
+			)
+	@JoinColumn(name="uid",
+			nullable = false
+			)
 	UserProfile user;
 	
 	
@@ -30,6 +45,17 @@ public class IotAction {
 	}
 	
 	
+	public IotAction(Long id, String ioId, String ioMode, String ioAction, Board board, UserProfile user) {
+		super();
+		this.id = id;
+		this.ioId = ioId;
+		this.ioMode = ioMode;
+		this.ioAction = ioAction;
+		this.board = board;
+		this.user = user;
+	}
+
+
 	public IotAction() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -71,6 +97,13 @@ public class IotAction {
 	}
 	public void setUser(UserProfile user) {
 		this.user = user;
+	}
+
+
+	@Override
+	public String toString() {
+		return "IotAction [id=" + id + ", ioId=" + ioId + ", ioMode=" + ioMode + ", ioAction=" + ioAction + ", board="
+				+ board + ", user=" + user + "]";
 	}
 	
 	
