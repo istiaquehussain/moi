@@ -1,8 +1,9 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   application:
-    name: iotcore    
+    name: iotcore
+#./mvnw spring-boot:run    
 
   
     
